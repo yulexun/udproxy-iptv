@@ -13,18 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Replace rtp with http in m3u file
+      - name: Create new m3u with replaced rtp
         run: |
-          sed -i 's|^rtp://|http://router.lan.prpr.one:4022/rtp/|g' bj-unicom-iptv.m3u
+          sed 's|^rtp://|http://router.lan.prpr.one:4022/rtp/|g' bj-unicom-iptv.m3u > bj-unicom-iptv-http.m3u
 
       - name: Show diff
         run: |
-          git diff bj-unicom-iptv.m3u
-
-      - name: Commit and push changes
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add bj-unicom-iptv.m3u
-          git commit -m 'chore: replace rtp with http in m3u file' || echo 'No changes to commit'
-          git push
+          diff bj-unicom-iptv.m3u bj-unicom-iptv-http.m3u || true
