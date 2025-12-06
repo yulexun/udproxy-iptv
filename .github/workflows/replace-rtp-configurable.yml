@@ -1,10 +1,15 @@
-name: Replace rtp with http in m3u
+name: Replace rtp with configurable URL
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'bj-unicom-iptv.m3u'
+    inputs:
+      replacement_url:
+        description: 'Replacement URL (without trailing slash)'
+        required: true
+        default: 'http://router.lan.prpr.one:4022/rtp'
+        type: string
+  schedule:
+    - cron: '0 0 * * 0'  # Run every Sunday at midnight UTC
 
 jobs:
   replace-rtp:
@@ -17,9 +22,13 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download source m3u file
+        run: |
+          curl -L -o bj-unicom-iptv.m3u https://raw.githubusercontent.com/lelehub/udpxy-IPTV/main/bj-unicom-iptv.m3u
+
       - name: Create new m3u with replaced rtp
         run: |
-          sed 's|^rtp://|http://router.lan.prpr.one:4022/rtp/|g' bj-unicom-iptv.m3u > bj-unicom-iptv-http.m3u
+          sed 's|^rtp://|${{ inputs.replacement_url || 'http://router.lan.prpr.one:4022/rtp' }}/|g' bj-unicom-iptv.m3u > bj-unicom-iptv-http.m3u
 
       - name: Show diff
         run: |
@@ -30,6 +39,7 @@ jobs:
         with:
           name: bj-unicom-iptv-http
           path: bj-unicom-iptv-http.m3u
+          
       - name: Commit and push new file
         run: |
           git config --global user.name 'github-actions[bot]'
