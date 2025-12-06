@@ -20,3 +20,9 @@ jobs:
       - name: Show diff
         run: |
           diff bj-unicom-iptv.m3u bj-unicom-iptv-http.m3u || true
+          
+      - name: Upload new m3u file as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bj-unicom-iptv-http
+          path: bj-unicom-iptv-http.m3u
