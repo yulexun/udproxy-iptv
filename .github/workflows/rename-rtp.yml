@@ -9,9 +9,13 @@ on:
 jobs:
   replace-rtp:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create new m3u with replaced rtp
         run: |
@@ -26,12 +30,6 @@ jobs:
         with:
           name: bj-unicom-iptv-http
           path: bj-unicom-iptv-http.m3u
-      - name: Set up authentication for push
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          
       - name: Commit and push new file
         run: |
           git config --global user.name 'github-actions[bot]'
