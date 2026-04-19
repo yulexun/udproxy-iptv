@@ -55,5 +55,6 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add bj-unicom-iptv-http.m3u
+          git add bj-unucom-iptv-http-haifengjiayuan.m3u
           git commit -m 'chore: add m3u file with rtp replaced by http' || echo 'No changes to commit'
           git push
