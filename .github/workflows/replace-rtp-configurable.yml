@@ -30,6 +30,10 @@ jobs:
         run: |
           sed 's|^rtp://|${{ inputs.replacement_url || 'http://router.lan.prpr.one:4022/rtp' }}/|g' bj-unicom-iptv.m3u > bj-unicom-iptv-http.m3u
 
+      - name: Create new m3u with replaced rtp haifengjiayuan
+        run: |
+          sed 's|^rtp://|${{ inputs.replacement_url || 'http://192.168.4.1:5140/rtp' }}/|g' bj-unicom-iptv.m3u > bj-unicom-iptv-http-haifengjiayuan.m3u
+
       - name: Show diff
         run: |
           diff bj-unicom-iptv.m3u bj-unicom-iptv-http.m3u || true
@@ -39,6 +43,12 @@ jobs:
         with:
           name: bj-unicom-iptv-http
           path: bj-unicom-iptv-http.m3u
+          
+      - name: Upload new m3u file as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bj-unicom-iptv-http-haifengjiayuan
+          path: bj-unicom-iptv-http-haifengjiayuan.m3u
           
       - name: Commit and push new file
         run: |
