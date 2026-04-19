@@ -32,7 +32,7 @@ jobs:
 
       - name: Create new m3u with replaced rtp haifengjiayuan
         run: |
-          sed 's|^rtp://|${{ inputs.replacement_url || 'http://192.168.4.1:5140/rtp' }}/|g' bj-unicom-iptv.m3u > bj-unicom-iptv-http-haifengjiayuan.m3u
+          sed 's|^rtp://|${{ 'http://192.168.4.1:5140/rtp' }}/|g' bj-unicom-iptv.m3u > bj-unicom-iptv-http-haifengjiayuan.m3u
 
       - name: Show diff
         run: |
